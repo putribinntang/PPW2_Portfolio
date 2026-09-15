@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProjectController;
 
 Route::view('/', 'home')->name('home');
 
@@ -9,6 +9,4 @@ Route::view('/about', 'about')->name('about');
 
 Route::view('/education', 'education')->name('education');
 
-Route::view('/projects', 'projects')->name('projects');
-
-Route::resource('posts', PostController::class);
+Route::resource('projects', ProjectController::class);
