@@ -1,31 +1,41 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Project')
+@section('title', 'Add Project')
 
 @section('content')
 
-<h1>Tambah Project</h1>
+@if ($errors->any())
+    <div>
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+<h1>Add Project</h1>
 
 <form action="{{ route('projects.store') }}" method="POST">
 
     @csrf
 
     <div>
-        <label for="title">Judul Project</label>
+        <label for="title">Project Title</label>
         <input type="text" id="title" name="title" required>
     </div>
 
     <br>
 
     <div>
-        <label for="description">Deskripsi</label>
+        <label for="description">Description</label>
         <textarea id="description" name="description" required></textarea>
     </div>
 
     <br>
 
     <div>
-        <label for="technologies">Teknologi</label>
+        <label for="technologies">Technologies</label>
         <input type="text" id="technologies" name="technologies">
     </div>
 
@@ -38,14 +48,14 @@
 
     <br>
 
-    <button type="submit">Tambah Project</button>
+    <button type="submit">Add Project</button>
 
 </form>
 
 <br>
 
 <a href="{{ route('projects.index') }}">
-    Kembali ke Projects
+    Back to Projects
 </a>
 
 @endsection

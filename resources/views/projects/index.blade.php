@@ -4,6 +4,12 @@
 
 @section('content')
 
+@if (session('success'))
+    <div>
+        {{ session('success') }}
+    </div>
+@endif
+
 <h1>Projects</h1>
 
 <a href="{{ route('projects.create') }}">Tambah Project</a>
