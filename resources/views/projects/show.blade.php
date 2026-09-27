@@ -14,10 +14,6 @@
 
 <p>{{ $project->description }}</p>
 
-<h1>{{ $project->title }}</h1>
-
-<p>{{ $project->description }}</p>
-
 <p>
     <strong>Technologies:</strong>
     {{ $project->technologies }}
