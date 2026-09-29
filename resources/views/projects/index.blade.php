@@ -12,7 +12,9 @@
 
 <h1>Projects</h1>
 
-<a href="{{ route('projects.create') }}">Tambah Project</a>
+<a href="{{ route('projects.create') }}">Add Project</a>
+<br>
+<a href="{{ route('projects.trash') }}"> Trash </a>
 
 @foreach ($projects as $project)
 
