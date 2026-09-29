@@ -1,0 +1,33 @@
+@extends('layouts.app')
+
+@section('title', 'Projects')
+
+@section('content')
+
+@if (session('success'))
+    <div>
+        {{ session('success') }}
+    </div>
+@endif
+
+<h1>Projects</h1>
+
+<a href="{{ route('projects.create') }}">Add Project</a>
+<br>
+<a href="{{ route('projects.trash') }}"> Trash </a>
+
+@foreach ($projects as $project)
+
+    <div>
+        <h2>{{ $project->title }}</h2>
+
+        <p>{{ $project->description }}</p>
+
+        <a href="{{ route('projects.show', $project->id) }}">
+            Lihat Detail
+        </a>
+    </div>
+
+@endforeach
+
+@endsection
