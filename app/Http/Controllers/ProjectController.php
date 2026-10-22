@@ -7,11 +7,31 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
-    public function index()
-    {
-        $projects = Project::all();
 
-        return view('projects.index', compact('projects'));
+    public function index(Request $request)
+    {
+        $search = $request->input('search', '');
+
+        $perPage = (int) $request->input('per_page', 10);
+
+        if (! in_array($perPage, [5, 10, 25], true)) {
+            $perPage = 10;
+        }
+
+        $projects = Project::query()
+            ->when($search, function ($query, $search) {
+                $query->where('title', 'like', '%' . $search . '%');
+            })
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->paginate($perPage)
+            ->withQueryString();
+
+        return view('projects.index', compact(
+            'projects',
+            'search',
+            'perPage'
+        ));
     }
 
     public function create()
