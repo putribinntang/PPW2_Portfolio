@@ -13,16 +13,47 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
 
+        {{-- Profile Photo --}}
+        <div>
+            <x-input-label for="profile_photo" value="Profile Photo" />
+
+            @if ($user->profile_photo)
+                <div class="mt-2">
+                    <img
+                        src="{{ asset('storage/' . $user->profile_photo) }}"
+                        alt="Profile Photo"
+                        class="h-24 w-24 rounded-full object-cover"
+                    />
+                </div>
+            @endif
+
+            <input
+                id="profile_photo"
+                name="profile_photo"
+                type="file"
+                accept=".jpg,.jpeg,.png,.webp"
+                class="mt-1 block w-full text-sm text-gray-700"
+            />
+
+            <p class="mt-1 text-xs text-gray-500">
+                JPG, JPEG, PNG, atau WEBP. Maksimal 2 MB dan minimal 200 x 200 piksel.
+            </p>
+
+            <x-input-error class="mt-2" :messages="$errors->get('profile_photo')" />
+        </div>
+
+        {{-- Name --}}
         <div>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
+        {{-- Email --}}
         <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />

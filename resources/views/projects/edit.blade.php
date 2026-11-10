@@ -69,6 +69,34 @@
 
     <br>
 
+    <div>
+        <label for="thumbnail">Project Thumbnail</label>
+
+        @if ($project->thumbnail)
+            <div>
+                <p>Current Thumbnail:</p>
+                <img
+                    src="{{ asset('storage/' . $project->thumbnail) }}"
+                    alt="Project Thumbnail"
+                    width="200"
+                >
+            </div>
+        @endif
+
+        <input
+            type="file"
+            name="thumbnail"
+            id="thumbnail"
+            accept=".jpg,.jpeg,.png,.webp"
+        >
+
+        @error('thumbnail')
+            <p class="text-red-500">{{ $message }}</p>
+        @enderror
+    </div>
+
+    <br>
+    
     <button type="submit">Save Changes</button>
 
 </form>

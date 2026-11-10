@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -45,8 +46,13 @@ class ProjectController extends Controller
             'title' => 'required|min:5',
             'description' => 'required|min:10',
             'technologies' => 'nullable',
-            'link' => 'nullable|url'
+            'link' => 'nullable|url',
+            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048|dimensions:min_width=400,min_height=300',
         ]);
+
+        if ($request->hasFile('thumbnail')) {
+            $validatedData['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+        }
 
         Project::create($validatedData);
 
@@ -70,15 +76,27 @@ class ProjectController extends Controller
             'title' => 'required|min:5',
             'description' => 'required|min:10',
             'technologies' => 'nullable',
-            'link' => 'nullable|url'
+            'link' => 'nullable|url',
+            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048|dimensions:min_width=400,min_height=300'
         ]);
+
+        if ($request->hasFile('thumbnail')) {
+
+            // Hapus thumbnail lama jika tersedia
+            if ($project->thumbnail) {
+                Storage::disk('public')->delete($project->thumbnail);
+            }
+
+            // Simpan thumbnail baru
+            $validatedData['thumbnail'] = $request->file('thumbnail')
+                ->store('thumbnails', 'public');
+        }
 
         $project->update($validatedData);
 
         return redirect()->route('projects.show', $project->id)
             ->with('success', 'Project successfully updated.');
     }
-
     public function destroy(Project $project)
     {
         $project->delete();
@@ -108,6 +126,18 @@ class ProjectController extends Controller
     {
         $project = Project::onlyTrashed()->findOrFail($id);
 
+        // Hapus thumbnail project
+        if ($project->thumbnail) {
+            Storage::disk('public')->delete($project->thumbnail);
+        }
+
+        // Hapus semua gambar gallery
+        foreach ($project->images as $image) {
+            Storage::disk('public')->delete($image->image);
+            $image->delete();
+        }
+
+        // Hapus project secara permanen
         $project->forceDelete();
 
         return redirect()->route('projects.trash')

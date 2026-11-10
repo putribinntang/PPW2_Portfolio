@@ -3,11 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProjectImageController;
 
 // Halaman publik
 Route::view('/', 'home')->name('home');
 Route::view('/about', 'about')->name('about');
 Route::view('/education', 'education')->name('education');
+Route::view('/experience', 'experience')->name('experience');
 
 // My Profile (khusus pengguna login)
 Route::get('/myprofile', function () {
@@ -34,6 +37,20 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Create, store, edit, update, destroy
     Route::resource('projects', ProjectController::class)
         ->except(['index', 'show']);
+
+    // Gallery Project
+    Route::post('/projects/{project}/images', [ProjectImageController::class, 'store'])
+        ->name('projects.images.store');
+
+    Route::put('/projects/{project}/images/{image}', [ProjectImageController::class, 'update'])
+        ->name('projects.images.update');
+
+    Route::delete('/projects/{project}/images/{image}', [ProjectImageController::class, 'destroy'])
+        ->name('projects.images.destroy');
+
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
 });
 
 // Detail project (publik, diletakkan paling akhir)

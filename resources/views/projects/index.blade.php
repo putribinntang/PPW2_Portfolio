@@ -3,7 +3,6 @@
 
 @section('title', 'Projects')
 
-
 @section('content')
 
 @if (session('success'))
@@ -26,7 +25,7 @@
         type="text"
         name="search"
         value="{{ $search }}"
-        placeholder="Cari judul project..."
+        placeholder="Search project title..."
     >
 
     <select name="per_page">
@@ -41,7 +40,7 @@
         </option>
     </select>
 
-    <button type="submit">Cari / Terapkan</button>
+    <button type="submit">Search / Apply</button>
 
     <a href="{{ route('projects.index') }}">Reset</a>
 </form>
@@ -50,26 +49,41 @@
 
     @foreach ($projects as $project)
         <div>
+
             <p>No. {{ $projects->firstItem() + $loop->index }}</p>
+
+            {{-- Project Thumbnail --}}
+            @if ($project->thumbnail)
+                <img
+                    src="{{ asset('storage/' . $project->thumbnail) }}"
+                    alt="{{ $project->title }}"
+                    width="200"
+                >
+            @else
+                <p>No Thumbnail</p>
+            @endif
 
             <h2>{{ $project->title }}</h2>
 
             <p>{{ $project->description }}</p>
 
             <a href="{{ route('projects.show', $project->id) }}">
-                Lihat Detail
+                View Project
             </a>
+
         </div>
+
+        <hr>
     @endforeach
 
     <div>
-        Menampilkan {{ $projects->firstItem() }}
-        sampai {{ $projects->lastItem() }}
-        dari {{ $projects->total() }} project.
+        Showing {{ $projects->firstItem() }}
+        to {{ $projects->lastItem() }}
+        of {{ $projects->total() }} projects.
         <br>
-        Halaman: {{ $projects->currentPage() }}
+        Page: {{ $projects->currentPage() }}
         <br>
-        Data per halaman: {{ $projects->perPage() }}
+        Data per page: {{ $projects->perPage() }}
     </div>
 
     <div>
@@ -77,7 +91,7 @@
     </div>
 
 @else
-    <p>Project tidak ditemukan.</p>
+    <p>Project not found.</p>
 @endif
 
 @endsection
